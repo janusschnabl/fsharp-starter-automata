@@ -26,8 +26,11 @@
     <Compile Include="src/Calculator.fs" />
     <Compile Include="src/Compiler.fs" />
     <Compile Include="src/Interpreter.fs" />
-    <Compile Include="src/BiGCL.fs" />
-    <Compile Include="src/RiscV.fs" />
+    <Compile Include="src/RegexToENFA.fs" />
+    <Compile Include="src/RegexToNFA.fs" />
+    <Compile Include="src/RegexToDFA.fs" />
+<!--     <Compile Include="src/BiGCL.fs" />
+    <Compile Include="src/RiscV.fs" /> -->
     <Compile Include="src/SignAnalysis.fs" />
     <Compile Include="src/SecurityAnalysis.fs" />
     <Compile Include="src/Program.fs" />
