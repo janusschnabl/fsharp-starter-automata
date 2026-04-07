@@ -8,6 +8,7 @@ type token =
   | PLUS
   | PIPE
   | EOF
+  | EMPTY
 type tokenId = 
     | TOKEN_CHAR
     | TOKEN_LPAREN
@@ -16,6 +17,7 @@ type tokenId =
     | TOKEN_PLUS
     | TOKEN_PIPE
     | TOKEN_EOF
+    | TOKEN_EMPTY
     | TOKEN_end_of_input
     | TOKEN_error
 type nonTerminalId = 

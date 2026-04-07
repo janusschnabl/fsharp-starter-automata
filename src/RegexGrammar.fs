@@ -17,6 +17,7 @@ type token =
   | PLUS
   | PIPE
   | EOF
+  | EMPTY
 // This type is used to give symbolic names to token indexes, useful for error messages
 type tokenId = 
     | TOKEN_CHAR
@@ -26,6 +27,7 @@ type tokenId =
     | TOKEN_PLUS
     | TOKEN_PIPE
     | TOKEN_EOF
+    | TOKEN_EMPTY
     | TOKEN_end_of_input
     | TOKEN_error
 // This type is used to give symbolic names to token indexes, useful for error messages
@@ -47,6 +49,7 @@ let tagOfToken (t:token) =
   | PLUS  -> 4 
   | PIPE  -> 5 
   | EOF  -> 6 
+  | EMPTY  -> 7 
 
 // This function maps integer indexes to symbolic token ids
 let tokenTagToTokenId (tokenIdx:int) = 
@@ -58,8 +61,9 @@ let tokenTagToTokenId (tokenIdx:int) =
   | 4 -> TOKEN_PLUS 
   | 5 -> TOKEN_PIPE 
   | 6 -> TOKEN_EOF 
-  | 9 -> TOKEN_end_of_input
-  | 7 -> TOKEN_error
+  | 7 -> TOKEN_EMPTY 
+  | 10 -> TOKEN_end_of_input
+  | 8 -> TOKEN_error
   | _ -> failwith "tokenTagToTokenId: bad token"
 
 /// This function maps production indexes returned in syntax errors to strings representing the non terminal that would be produced by that production
@@ -67,19 +71,22 @@ let prodIdxToNonTerminal (prodIdx:int) =
   match prodIdx with
     | 0 -> NONTERM__startregex 
     | 1 -> NONTERM_regex 
-    | 2 -> NONTERM_expr 
+    | 2 -> NONTERM_regex 
     | 3 -> NONTERM_expr 
-    | 4 -> NONTERM_term 
+    | 4 -> NONTERM_expr 
     | 5 -> NONTERM_term 
-    | 6 -> NONTERM_factor 
-    | 7 -> NONTERM_factor 
+    | 6 -> NONTERM_term 
+    | 7 -> NONTERM_term 
     | 8 -> NONTERM_factor 
-    | 9 -> NONTERM_atom 
-    | 10 -> NONTERM_atom 
+    | 9 -> NONTERM_factor 
+    | 10 -> NONTERM_factor 
+    | 11 -> NONTERM_atom 
+    | 12 -> NONTERM_atom 
+    | 13 -> NONTERM_atom 
     | _ -> failwith "prodIdxToNonTerminal: bad production index"
 
-let _fsyacc_endOfInputTag = 9 
-let _fsyacc_tagOfErrorTerminal = 7
+let _fsyacc_endOfInputTag = 10 
+let _fsyacc_tagOfErrorTerminal = 8
 
 // This function gets the name of a token as a string
 let token_to_string (t:token) = 
@@ -91,6 +98,7 @@ let token_to_string (t:token) =
   | PLUS  -> "PLUS" 
   | PIPE  -> "PIPE" 
   | EOF  -> "EOF" 
+  | EMPTY  -> "EMPTY" 
 
 // This function gets the data carried by a token as an object
 let _fsyacc_dataOfToken (t:token) = 
@@ -102,18 +110,19 @@ let _fsyacc_dataOfToken (t:token) =
   | PLUS  -> (null : System.Object) 
   | PIPE  -> (null : System.Object) 
   | EOF  -> (null : System.Object) 
-let _fsyacc_gotos = [| 0us;65535us;1us;65535us;0us;1us;2us;65535us;0us;2us;14us;5us;3us;65535us;0us;4us;6us;7us;14us;4us;5us;65535us;0us;8us;4us;9us;6us;8us;7us;9us;14us;8us;5us;65535us;0us;10us;4us;10us;6us;10us;7us;10us;14us;10us;|]
+  | EMPTY  -> (null : System.Object) 
+let _fsyacc_gotos = [| 0us;65535us;1us;65535us;0us;1us;2us;65535us;0us;2us;15us;6us;3us;65535us;0us;5us;7us;8us;15us;5us;5us;65535us;0us;9us;5us;10us;7us;9us;8us;10us;15us;9us;5us;65535us;0us;11us;5us;11us;7us;11us;8us;11us;15us;11us;|]
 let _fsyacc_sparseGotoTableRowOffsets = [|0us;1us;3us;6us;10us;16us;|]
-let _fsyacc_stateToProdIdxsTableElements = [| 1us;0us;1us;0us;2us;1us;3us;1us;1us;2us;2us;5us;2us;3us;10us;1us;3us;2us;3us;5us;1us;4us;1us;5us;3us;6us;7us;8us;1us;7us;1us;8us;1us;9us;1us;10us;1us;10us;|]
-let _fsyacc_stateToProdIdxsTableRowOffsets = [|0us;2us;4us;7us;9us;12us;15us;17us;20us;22us;24us;28us;30us;32us;34us;36us;|]
-let _fsyacc_action_rows = 16
-let _fsyacc_actionTableElements = [|2us;32768us;0us;13us;1us;14us;0us;49152us;2us;32768us;5us;6us;6us;3us;0us;16385us;2us;16386us;0us;13us;1us;14us;2us;32768us;2us;15us;5us;6us;2us;32768us;0us;13us;1us;14us;2us;16387us;0us;13us;1us;14us;0us;16388us;0us;16389us;2us;16390us;3us;11us;4us;12us;0us;16391us;0us;16392us;0us;16393us;2us;32768us;0us;13us;1us;14us;0us;16394us;|]
-let _fsyacc_actionTableRowOffsets = [|0us;3us;4us;7us;8us;11us;14us;17us;20us;21us;22us;25us;26us;27us;28us;31us;|]
-let _fsyacc_reductionSymbolCounts = [|1us;2us;1us;3us;1us;2us;1us;2us;2us;1us;3us;|]
-let _fsyacc_productionToNonTerminalTable = [|0us;1us;2us;2us;3us;3us;4us;4us;4us;5us;5us;|]
-let _fsyacc_immediateActions = [|65535us;49152us;65535us;16385us;65535us;65535us;65535us;65535us;16388us;16389us;65535us;16391us;16392us;16393us;65535us;16394us;|]
+let _fsyacc_stateToProdIdxsTableElements = [| 1us;0us;1us;0us;2us;1us;4us;1us;1us;1us;2us;2us;3us;6us;2us;4us;12us;1us;4us;2us;4us;6us;1us;5us;1us;6us;3us;8us;9us;10us;1us;9us;1us;10us;1us;11us;2us;12us;13us;1us;12us;1us;13us;|]
+let _fsyacc_stateToProdIdxsTableRowOffsets = [|0us;2us;4us;7us;9us;11us;14us;17us;19us;22us;24us;26us;30us;32us;34us;36us;39us;41us;|]
+let _fsyacc_action_rows = 18
+let _fsyacc_actionTableElements = [|3us;16391us;0us;14us;1us;15us;6us;4us;0us;49152us;2us;32768us;5us;7us;6us;3us;0us;16385us;0us;16386us;2us;16387us;0us;14us;1us;15us;2us;32768us;2us;16us;5us;7us;2us;16391us;0us;14us;1us;15us;2us;16388us;0us;14us;1us;15us;0us;16389us;0us;16390us;2us;16392us;3us;12us;4us;13us;0us;16393us;0us;16394us;0us;16395us;3us;16391us;0us;14us;1us;15us;2us;17us;0us;16396us;0us;16397us;|]
+let _fsyacc_actionTableRowOffsets = [|0us;4us;5us;8us;9us;10us;13us;16us;19us;22us;23us;24us;27us;28us;29us;30us;34us;35us;|]
+let _fsyacc_reductionSymbolCounts = [|1us;2us;1us;1us;3us;1us;2us;0us;1us;2us;2us;1us;3us;2us;|]
+let _fsyacc_productionToNonTerminalTable = [|0us;1us;1us;2us;2us;3us;3us;3us;4us;4us;4us;5us;5us;5us;|]
+let _fsyacc_immediateActions = [|65535us;49152us;65535us;16385us;16386us;65535us;65535us;65535us;65535us;16389us;16390us;65535us;16393us;16394us;16395us;65535us;16396us;16397us;|]
 let _fsyacc_reductions = lazy [|
-# 116 "src/RegexGrammar.fs"
+# 125 "src/RegexGrammar.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _1 = parseState.GetInput(1) :?> RegexAST.regex in
             Microsoft.FSharp.Core.Operators.box
@@ -122,7 +131,7 @@ let _fsyacc_reductions = lazy [|
                       raise (FSharp.Text.Parsing.Accept(Microsoft.FSharp.Core.Operators.box _1))
                    )
                  : 'gentype__startregex));
-# 125 "src/RegexGrammar.fs"
+# 134 "src/RegexGrammar.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _1 = parseState.GetInput(1) :?> 'gentype_expr in
             Microsoft.FSharp.Core.Operators.box
@@ -133,109 +142,139 @@ let _fsyacc_reductions = lazy [|
                    )
 # 11 "src/RegexGrammar.fsy"
                  : RegexAST.regex));
-# 136 "src/RegexGrammar.fs"
+# 145 "src/RegexGrammar.fs"
+        (fun (parseState : FSharp.Text.Parsing.IParseState) ->
+            Microsoft.FSharp.Core.Operators.box
+                (
+                   (
+# 12 "src/RegexGrammar.fsy"
+                                  Empty 
+                   )
+# 12 "src/RegexGrammar.fsy"
+                 : RegexAST.regex));
+# 155 "src/RegexGrammar.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _1 = parseState.GetInput(1) :?> 'gentype_term in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 13 "src/RegexGrammar.fsy"
+# 14 "src/RegexGrammar.fsy"
                                   _1 
                    )
-# 13 "src/RegexGrammar.fsy"
+# 14 "src/RegexGrammar.fsy"
                  : 'gentype_expr));
-# 147 "src/RegexGrammar.fs"
+# 166 "src/RegexGrammar.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _1 = parseState.GetInput(1) :?> 'gentype_expr in
             let _3 = parseState.GetInput(3) :?> 'gentype_term in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 14 "src/RegexGrammar.fsy"
+# 15 "src/RegexGrammar.fsy"
                                             Alt(_1, _3) 
                    )
-# 14 "src/RegexGrammar.fsy"
+# 15 "src/RegexGrammar.fsy"
                  : 'gentype_expr));
-# 159 "src/RegexGrammar.fs"
+# 178 "src/RegexGrammar.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _1 = parseState.GetInput(1) :?> 'gentype_factor in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 16 "src/RegexGrammar.fsy"
+# 17 "src/RegexGrammar.fsy"
                                     _1 
                    )
-# 16 "src/RegexGrammar.fsy"
+# 17 "src/RegexGrammar.fsy"
                  : 'gentype_term));
-# 170 "src/RegexGrammar.fs"
+# 189 "src/RegexGrammar.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _1 = parseState.GetInput(1) :?> 'gentype_term in
             let _2 = parseState.GetInput(2) :?> 'gentype_factor in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 17 "src/RegexGrammar.fsy"
+# 18 "src/RegexGrammar.fsy"
                                          Concat(_1, _2) 
                    )
-# 17 "src/RegexGrammar.fsy"
+# 18 "src/RegexGrammar.fsy"
                  : 'gentype_term));
-# 182 "src/RegexGrammar.fs"
+# 201 "src/RegexGrammar.fs"
+        (fun (parseState : FSharp.Text.Parsing.IParseState) ->
+            Microsoft.FSharp.Core.Operators.box
+                (
+                   (
+# 19 "src/RegexGrammar.fsy"
+                             Empty 
+                   )
+# 19 "src/RegexGrammar.fsy"
+                 : 'gentype_term));
+# 211 "src/RegexGrammar.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _1 = parseState.GetInput(1) :?> 'gentype_atom in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 19 "src/RegexGrammar.fsy"
+# 21 "src/RegexGrammar.fsy"
                                     _1 
                    )
-# 19 "src/RegexGrammar.fsy"
+# 21 "src/RegexGrammar.fsy"
                  : 'gentype_factor));
-# 193 "src/RegexGrammar.fs"
+# 222 "src/RegexGrammar.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _1 = parseState.GetInput(1) :?> 'gentype_atom in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 20 "src/RegexGrammar.fsy"
+# 22 "src/RegexGrammar.fsy"
                                          Star _1 
                    )
-# 20 "src/RegexGrammar.fsy"
+# 22 "src/RegexGrammar.fsy"
                  : 'gentype_factor));
-# 204 "src/RegexGrammar.fs"
+# 233 "src/RegexGrammar.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _1 = parseState.GetInput(1) :?> 'gentype_atom in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 21 "src/RegexGrammar.fsy"
+# 23 "src/RegexGrammar.fsy"
                                          Plus _1 
                    )
-# 21 "src/RegexGrammar.fsy"
+# 23 "src/RegexGrammar.fsy"
                  : 'gentype_factor));
-# 215 "src/RegexGrammar.fs"
+# 244 "src/RegexGrammar.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _1 = parseState.GetInput(1) :?> char in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 23 "src/RegexGrammar.fsy"
+# 25 "src/RegexGrammar.fsy"
                                   Char _1 
                    )
-# 23 "src/RegexGrammar.fsy"
+# 25 "src/RegexGrammar.fsy"
                  : 'gentype_atom));
-# 226 "src/RegexGrammar.fs"
+# 255 "src/RegexGrammar.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             let _2 = parseState.GetInput(2) :?> 'gentype_expr in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 24 "src/RegexGrammar.fsy"
+# 26 "src/RegexGrammar.fsy"
                                                 _2 
                    )
-# 24 "src/RegexGrammar.fsy"
+# 26 "src/RegexGrammar.fsy"
+                 : 'gentype_atom));
+# 266 "src/RegexGrammar.fs"
+        (fun (parseState : FSharp.Text.Parsing.IParseState) ->
+            Microsoft.FSharp.Core.Operators.box
+                (
+                   (
+# 27 "src/RegexGrammar.fsy"
+                                           Empty 
+                   )
+# 27 "src/RegexGrammar.fsy"
                  : 'gentype_atom));
 |]
-# 238 "src/RegexGrammar.fs"
+# 277 "src/RegexGrammar.fs"
 let tables : FSharp.Text.Parsing.Tables<_> = 
   { reductions = _fsyacc_reductions.Value;
     endOfInputTag = _fsyacc_endOfInputTag;
@@ -254,7 +293,7 @@ let tables : FSharp.Text.Parsing.Tables<_> =
                               match parse_error_rich with 
                               | Some f -> f ctxt
                               | None -> parse_error ctxt.Message);
-    numTerminals = 10;
+    numTerminals = 11;
     productionToNonTerminalTable = _fsyacc_productionToNonTerminalTable  }
 let engine lexer lexbuf startState = tables.Interpret(lexer, lexbuf, startState)
 let regex lexer lexbuf : RegexAST.regex =
