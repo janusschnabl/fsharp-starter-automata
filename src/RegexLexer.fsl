@@ -1,0 +1,21 @@
+{
+open FSharp.Text.Lexing
+open System
+open RegexGrammar
+System.Globalization.CultureInfo.CurrentCulture <- new System.Globalization.CultureInfo("en-US")
+}
+
+let whitespace = [' ' '\t']
+let newline = "\n\r" | '\n' | '\r'
+
+rule tokenize = parse
+| whitespace    { tokenize lexbuf }
+| newline       { lexbuf.EndPos <- lexbuf.EndPos.NextLine; tokenize lexbuf }
+| '('           { LPAREN }
+| ')'           { RPAREN }
+| '*'           { STAR }
+| '+'           { PLUS }
+| '|'           { PIPE }
+| ['a'-'z' 'A'-'Z' '0'-'9'] { CHAR (LexBuffer<_>.LexemeString lexbuf).[0] }
+| eof           { EOF }
+| _             { failwith "Unexpected character" }
