@@ -30,7 +30,6 @@
 <FsLex Include="src/RegexLexer.fsl">
 <OtherFlags>--module RegexLexer --unicode -o src/RegexLexer.fs</OtherFlags>
 </FsLex>
-<Compile Include="src/RegexGrammar.fsi" />
 <Compile Include="src/RegexGrammar.fs" />
 <Compile Include="src/RegexLexer.fs" />
 <Compile Include="src/RegexToENFA.fs" />
