@@ -96,14 +96,14 @@ let starNFA (nfa1: ThompsonResult) : ThompsonResult =
     
     let mergedStates = Set.add newStart (Set.add newAccept n1.states)
     
-    // Add epsilon from newStart to s1 and to newAccept (bypass)
-    let t1 = n1.transitions |> Map.add (newStart, None) [s1; newAccept]
+    // BUG: Intentionally broken - only add loop back, no bypass
+    let t1 = n1.transitions |> Map.add (newStart, None) [s1]
     
-    // Add epsilon from a1 to newAccept and back to s1 (loop)
+    // Add epsilon from a1 back to s1 (loop) but no direct path to accept
     let newTransition = 
         match Map.tryFind (a1, None) t1 with
-        | Some existing -> Map.add (a1, None) (existing @ [newAccept; s1]) t1
-        | None -> Map.add (a1, None) [newAccept; s1] t1
+        | Some existing -> Map.add (a1, None) (existing @ [s1]) t1
+        | None -> Map.add (a1, None) [s1] t1
     
     let nfa = { states = mergedStates; startState = newStart; acceptStates = set [newAccept]; transitions = newTransition }
     (nfa, newStart, newAccept)
