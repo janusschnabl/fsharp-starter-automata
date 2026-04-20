@@ -35,6 +35,7 @@
 <Compile Include="src/RegexToENFA.fs" />
 <Compile Include="src/RegexToNFA.fs" />
 <Compile Include="src/RegexToDFA.fs" />
+<Compile Include="src/RegexToDFADirect.fs" />
 <!--     <Compile Include="src/BiGCL.fs" />
     <Compile Include="src/RiscV.fs" /> -->
 <Compile Include="src/SignAnalysis.fs" />

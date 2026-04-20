@@ -96,14 +96,14 @@ let starNFA (nfa1: ThompsonResult) : ThompsonResult =
     
     let mergedStates = Set.add newStart (Set.add newAccept n1.states)
     
-    // Add epsilon from newStart to s1 and to newAccept (bypass)
+    // Add epsilon from newStart to s1 (enter) and to newAccept (bypass for zero matches)
     let t1 = n1.transitions |> Map.add (newStart, None) [s1; newAccept]
     
-    // Add epsilon from a1 to newAccept and back to s1 (loop)
+    // Add epsilon from a1 back to s1 (loop) and to newAccept (exit)
     let newTransition = 
         match Map.tryFind (a1, None) t1 with
-        | Some existing -> Map.add (a1, None) (existing @ [newAccept; s1]) t1
-        | None -> Map.add (a1, None) [newAccept; s1] t1
+        | Some existing -> Map.add (a1, None) (existing @ [s1; newAccept]) t1
+        | None -> Map.add (a1, None) [s1; newAccept] t1
     
     let nfa = { states = mergedStates; startState = newStart; acceptStates = set [newAccept]; transitions = newTransition }
     (nfa, newStart, newAccept)
@@ -148,21 +148,35 @@ let nfaToDot (nfa: EpsilonNFA) : string =
     for state in nfa.states do
         let isInitial = state = nfa.startState
         let isAccepting = Set.contains state nfa.acceptStates
+        let stateName = $"k{state}"
         if isInitial && isAccepting then
-            sb.AppendLine($"  {state} [isInitial=true, isAccepting=true];") |> ignore
+            sb.AppendLine($"  {stateName} [isInitial=true, isAccepting=true];") |> ignore
         elif isInitial then
-            sb.AppendLine($"  {state} [isInitial=true];") |> ignore
+            sb.AppendLine($"  {stateName} [isInitial=true];") |> ignore
         elif isAccepting then
-            sb.AppendLine($"  {state} [isAccepting=true];") |> ignore
+            sb.AppendLine($"  {stateName} [isAccepting=true];") |> ignore
         else
-            sb.AppendLine($"  {state};") |> ignore
+            sb.AppendLine($"  {stateName};") |> ignore
+    
+    // Helper to escape special characters for DOT format
+    let escapeDotLabel (c: char) : string =
+        match c with
+        | '"' -> "\\\""
+        | '\\' -> "\\\\"
+        | '\n' -> "\\n"
+        | '\r' -> "\\r"
+        | '\t' -> "\\t"
+        | ' ' -> "' '"
+        | _ -> c.ToString()
     
     for KeyValue((state, label), nextStates) in nfa.transitions do
         let labelStr = match label with
-                       | Some c -> c.ToString()
+                       | Some c -> escapeDotLabel c
                        | None -> "ε"
         for nextState in nextStates do
-            sb.AppendLine($"  {state} -> {nextState} [label=\"{labelStr}\"];") |> ignore
+            let fromName = $"k{state}"
+            let toName = $"k{nextState}"
+            sb.AppendLine($"  {fromName} -> {toName} [label=\"{labelStr}\"];") |> ignore
     
     sb.AppendLine("}") |> ignore
     sb.ToString()

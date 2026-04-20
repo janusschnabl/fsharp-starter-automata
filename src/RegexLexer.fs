@@ -11,7 +11,7 @@ System.Globalization.CultureInfo.CurrentCulture <- new System.Globalization.Cult
 let trans : uint16[] array = 
     [| 
     (* State 0 *)
-     [| 11us;11us;11us;11us;11us;11us;11us;11us;11us;1us;2us;11us;11us;3us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;1us;11us;11us;11us;11us;11us;11us;11us;4us;5us;6us;7us;11us;11us;11us;11us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;11us;11us;11us;11us;11us;11us;11us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;11us;11us;11us;11us;11us;11us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;11us;8us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;10us;|];
+     [| 11us;11us;11us;11us;11us;11us;11us;11us;11us;1us;2us;11us;11us;3us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;9us;9us;11us;9us;9us;9us;9us;11us;4us;5us;6us;7us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;11us;9us;9us;9us;11us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;9us;8us;9us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;11us;10us;|];
     (* State 1 *)
      [| 65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;65535us;|];
     (* State 2 *)
@@ -80,7 +80,7 @@ and tokenize  lexbuf =
           )
   | 7 -> ( 
 # 19 "src/RegexLexer.fsl"
-                                             CHAR (LexBuffer<_>.LexemeString lexbuf).[0] 
+                                                                                                                                         CHAR (LexBuffer<_>.LexemeString lexbuf).[0] 
 # 84 "src/RegexLexer.fs"
           )
   | 8 -> ( 

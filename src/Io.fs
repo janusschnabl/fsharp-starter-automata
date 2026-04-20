@@ -108,6 +108,12 @@ module ce_regex_to_dfa =
   type Output =
     { dot: string }
 
+module ce_regex_to_dfa_direct =
+  type Input =
+    { regex: string }
+  type Output =
+    { dot: string }
+
 module ce_regex_to_enfa =
   type Input =
     { regex: string }
@@ -128,6 +134,7 @@ module ce_shell =
     | Interpreter of input: Interpreter.Input * output: Interpreter.Output * meta: List<GCL.TargetDef>
     | Parser of input: Parser.Input * output: Parser.Output * meta: unit
     | RegexToDfa of input: ce_regex_to_dfa.Input * output: ce_regex_to_dfa.Output * meta: unit
+    | RegexToDfaDirect of input: ce_regex_to_dfa_direct.Input * output: ce_regex_to_dfa_direct.Output * meta: unit
     | RegexToEnfa of input: ce_regex_to_enfa.Input * output: ce_regex_to_enfa.Output * meta: unit
     | RegexToNfa of input: ce_regex_to_nfa.Input * output: ce_regex_to_nfa.Output * meta: unit
     | Security of input: SecurityAnalysis.Input * output: SecurityAnalysis.Output * meta: SecurityAnalysis.Meta
