@@ -1,9 +1,9 @@
-module RegexToDfa
-open Io.ce_regex_to_dfa
+module RegexToDfaDirect
+open Io.ce_regex_to_dfa_direct
 open RegexAST
-open RegexToNfa
+open RegexToEnfa
 
-/// Represents a DFA state
+/// Represents a DFA state (set of ENFA states)
 type DFAState = Set<int>
 
 /// Represents a DFA
@@ -15,28 +15,62 @@ type DFA = {
     alphabet: Set<char>
 }
 
-/// Get the alphabet from NFA transitions
-let get_alphabet (nfa: NFA) : Set<char> =
-    Map.fold (fun acc (_, symbol: char) _targets ->
-        Set.add symbol acc
-    ) Set.empty nfa.transitions
+/// Compute epsilon closure for a single state in ENFA
+let rec epsilon_closure (enfa: EpsilonNFA) (state: int) : Set<int> =
+    let visited = ref (Set.empty)
+    let worklist = ref [state]
+    
+    while !worklist <> [] do
+        let current = (!worklist).Head
+        worklist := (!worklist).Tail
+        
+        if not (Set.contains current !visited) then
+            visited := Set.add current !visited
+            
+            match Map.tryFind (current, None) enfa.transitions with
+            | Some targets ->
+                for target in targets do
+                    if not (Set.contains target !visited) then
+                        worklist := target :: !worklist
+            | None -> ()
+    
+    !visited
 
-/// Compute next DFA state from a set of NFA states via a symbol
-let next_dfa_state (nfa: NFA) (state_set: DFAState) (symbol: char) : DFAState =
-    Set.fold (fun acc nfa_state ->
-        match Map.tryFind (nfa_state, symbol) nfa.transitions with
-        | Some targets -> Set.union acc (Set.ofList targets)
+/// Compute epsilon closure for a set of states
+let epsilon_closure_set (enfa: EpsilonNFA) (states: Set<int>) : Set<int> =
+    Set.fold (fun acc state ->
+        Set.union acc (epsilon_closure enfa state)
+    ) Set.empty states
+
+/// Get alphabet from ENFA (only non-epsilon symbols)
+let get_alphabet (enfa: EpsilonNFA) : Set<char> =
+    Map.fold (fun acc (_, symbol: char option) _targets ->
+        match symbol with
+        | Some c -> Set.add c acc
         | None -> acc
-    ) Set.empty state_set
+    ) Set.empty enfa.transitions
+
+/// Compute next DFA state from current DFA state via symbol (directly from ENFA)
+let next_dfa_state (enfa: EpsilonNFA) (state_set: DFAState) (symbol: char) : DFAState =
+    let mutable targets = Set.empty
+    
+    for state in state_set do
+        match Map.tryFind (state, Some symbol) enfa.transitions with
+        | Some transition_targets ->
+            for target in transition_targets do
+                targets <- Set.add target targets
+        | None -> ()
+    
+    epsilon_closure_set enfa targets
 
 /// Check if a DFA state is accepting
-let is_accepting (dfa_state: DFAState) (nfa: NFA) : bool =
-    Set.exists (fun state -> Set.contains state nfa.acceptStates) dfa_state
+let is_accepting (dfa_state: DFAState) (enfa: EpsilonNFA) : bool =
+    Set.exists (fun state -> Set.contains state enfa.acceptStates) dfa_state
 
-/// Convert NFA to DFA using subset construction
-let nfa_to_dfa (nfa: NFA) : DFA =
-    let alphabet = get_alphabet nfa
-    let start_dfa_state = Set.singleton nfa.startState
+/// Convert ENFA to DFA directly using subset construction
+let enfa_to_dfa (enfa: EpsilonNFA) : DFA =
+    let alphabet = get_alphabet enfa
+    let start_dfa_state = epsilon_closure_set enfa (Set.singleton enfa.startState)
     
     let dfa_states = ref Map.empty
     let work_to_do = ref [start_dfa_state]
@@ -50,7 +84,7 @@ let nfa_to_dfa (nfa: NFA) : DFA =
             
             // Process each symbol in the alphabet
             for symbol in alphabet do
-                let next_states = next_dfa_state nfa current_subset symbol
+                let next_states = next_dfa_state enfa current_subset symbol
                 
                 // Always add transition, even if empty
                 transitions := Map.add (current_subset, symbol) next_states !transitions
@@ -60,7 +94,7 @@ let nfa_to_dfa (nfa: NFA) : DFA =
             
             dfa_states := Map.add current_subset !transitions !dfa_states
     
-    // Collect all unique DFA states (keys from dfa_states)
+    // Collect all unique DFA states
     let all_states = Map.fold (fun acc state _ -> Set.add state acc) Set.empty !dfa_states
     
     // Build flat transitions map
@@ -73,7 +107,7 @@ let nfa_to_dfa (nfa: NFA) : DFA =
     
     // Determine accepting states
     let accept_states = 
-        Set.filter (fun dfa_state -> is_accepting dfa_state nfa) all_states
+        Set.filter (fun dfa_state -> is_accepting dfa_state enfa) all_states
     
     {
         states = all_states
@@ -143,8 +177,7 @@ let analysis (input: Input) : Output =
     try
         let ast = RegexGrammar.regex RegexLexer.tokenize lexbuf
         let (enfa, _, _) = RegexToEnfa.regexToNFA ast
-        let nfa = RegexToNfa.enfa_to_nfa enfa
-        let dfa = nfa_to_dfa nfa
+        let dfa = enfa_to_dfa enfa
         let dot = dfa_to_dot dfa
         { dot = dot }
     with

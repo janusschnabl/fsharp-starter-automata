@@ -40,6 +40,11 @@ let main (args) =
         let output: Io.ce_regex_to_nfa.Output = RegexToNfa.analysis input
         Console.WriteLine("{0}", JsonSerializer.Serialize output)
         0
+    | [ "RegexToDfaDirect"; input ] ->
+        let input = JsonSerializer.Deserialize<Io.ce_regex_to_dfa_direct.Input> input
+        let output: Io.ce_regex_to_dfa_direct.Output = RegexToDfaDirect.analysis input
+        Console.WriteLine("{0}", JsonSerializer.Serialize output)
+        0
     | [ "Sign"; input ] ->
         let input = JsonSerializer.Deserialize<Io.SignAnalysis.Input> input
         let output: Io.SignAnalysis.Output = SignAnalysis.analysis input

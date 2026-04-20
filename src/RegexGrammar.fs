@@ -111,16 +111,16 @@ let _fsyacc_dataOfToken (t:token) =
   | PIPE  -> (null : System.Object) 
   | EOF  -> (null : System.Object) 
   | EMPTY  -> (null : System.Object) 
-let _fsyacc_gotos = [| 0us;65535us;1us;65535us;0us;1us;2us;65535us;0us;2us;15us;6us;3us;65535us;0us;5us;7us;8us;15us;5us;5us;65535us;0us;9us;5us;10us;7us;9us;8us;10us;15us;9us;5us;65535us;0us;11us;5us;11us;7us;11us;8us;11us;15us;11us;|]
-let _fsyacc_sparseGotoTableRowOffsets = [|0us;1us;3us;6us;10us;16us;|]
-let _fsyacc_stateToProdIdxsTableElements = [| 1us;0us;1us;0us;2us;1us;4us;1us;1us;1us;2us;2us;3us;6us;2us;4us;12us;1us;4us;2us;4us;6us;1us;5us;1us;6us;3us;8us;9us;10us;1us;9us;1us;10us;1us;11us;2us;12us;13us;1us;12us;1us;13us;|]
-let _fsyacc_stateToProdIdxsTableRowOffsets = [|0us;2us;4us;7us;9us;11us;14us;17us;19us;22us;24us;26us;30us;32us;34us;36us;39us;41us;|]
+let _fsyacc_gotos = [| 0us;65535us;1us;65535us;0us;1us;2us;65535us;0us;2us;15us;6us;4us;65535us;0us;5us;7us;8us;9us;10us;15us;5us;4us;65535us;0us;9us;7us;9us;9us;9us;15us;9us;4us;65535us;0us;11us;7us;11us;9us;11us;15us;11us;|]
+let _fsyacc_sparseGotoTableRowOffsets = [|0us;1us;3us;6us;11us;16us;|]
+let _fsyacc_stateToProdIdxsTableElements = [| 1us;0us;1us;0us;2us;1us;4us;1us;1us;1us;2us;1us;3us;2us;4us;12us;1us;4us;1us;4us;4us;5us;6us;9us;10us;1us;6us;1us;8us;1us;9us;1us;10us;1us;11us;2us;12us;13us;1us;12us;1us;13us;|]
+let _fsyacc_stateToProdIdxsTableRowOffsets = [|0us;2us;4us;7us;9us;11us;13us;16us;18us;20us;25us;27us;29us;31us;33us;35us;38us;40us;|]
 let _fsyacc_action_rows = 18
-let _fsyacc_actionTableElements = [|3us;16391us;0us;14us;1us;15us;6us;4us;0us;49152us;2us;32768us;5us;7us;6us;3us;0us;16385us;0us;16386us;2us;16387us;0us;14us;1us;15us;2us;32768us;2us;16us;5us;7us;2us;16391us;0us;14us;1us;15us;2us;16388us;0us;14us;1us;15us;0us;16389us;0us;16390us;2us;16392us;3us;12us;4us;13us;0us;16393us;0us;16394us;0us;16395us;3us;16391us;0us;14us;1us;15us;2us;17us;0us;16396us;0us;16397us;|]
-let _fsyacc_actionTableRowOffsets = [|0us;4us;5us;8us;9us;10us;13us;16us;19us;22us;23us;24us;27us;28us;29us;30us;34us;35us;|]
+let _fsyacc_actionTableElements = [|3us;16391us;0us;14us;1us;15us;6us;4us;0us;49152us;2us;32768us;5us;7us;6us;3us;0us;16385us;0us;16386us;0us;16387us;2us;32768us;2us;16us;5us;7us;2us;16391us;0us;14us;1us;15us;0us;16388us;4us;16389us;0us;14us;1us;15us;3us;12us;4us;13us;0us;16390us;0us;16392us;0us;16393us;0us;16394us;0us;16395us;3us;16391us;0us;14us;1us;15us;2us;17us;0us;16396us;0us;16397us;|]
+let _fsyacc_actionTableRowOffsets = [|0us;4us;5us;8us;9us;10us;11us;14us;17us;18us;23us;24us;25us;26us;27us;28us;32us;33us;|]
 let _fsyacc_reductionSymbolCounts = [|1us;2us;1us;1us;3us;1us;2us;0us;1us;2us;2us;1us;3us;2us;|]
 let _fsyacc_productionToNonTerminalTable = [|0us;1us;1us;2us;2us;3us;3us;3us;4us;4us;4us;5us;5us;5us;|]
-let _fsyacc_immediateActions = [|65535us;49152us;65535us;16385us;16386us;65535us;65535us;65535us;65535us;16389us;16390us;65535us;16393us;16394us;16395us;65535us;16396us;16397us;|]
+let _fsyacc_immediateActions = [|65535us;49152us;65535us;16385us;16386us;16387us;65535us;65535us;16388us;65535us;16390us;16392us;16393us;16394us;16395us;65535us;16396us;16397us;|]
 let _fsyacc_reductions = lazy [|
 # 125 "src/RegexGrammar.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
@@ -188,8 +188,8 @@ let _fsyacc_reductions = lazy [|
                  : 'gentype_term));
 # 189 "src/RegexGrammar.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = parseState.GetInput(1) :?> 'gentype_term in
-            let _2 = parseState.GetInput(2) :?> 'gentype_factor in
+            let _1 = parseState.GetInput(1) :?> 'gentype_factor in
+            let _2 = parseState.GetInput(2) :?> 'gentype_term in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -221,23 +221,23 @@ let _fsyacc_reductions = lazy [|
                  : 'gentype_factor));
 # 222 "src/RegexGrammar.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = parseState.GetInput(1) :?> 'gentype_atom in
+            let _1 = parseState.GetInput(1) :?> 'gentype_factor in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
 # 22 "src/RegexGrammar.fsy"
-                                         Star _1 
+                                           Star _1 
                    )
 # 22 "src/RegexGrammar.fsy"
                  : 'gentype_factor));
 # 233 "src/RegexGrammar.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = parseState.GetInput(1) :?> 'gentype_atom in
+            let _1 = parseState.GetInput(1) :?> 'gentype_factor in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
 # 23 "src/RegexGrammar.fsy"
-                                         Plus _1 
+                                           Plus _1 
                    )
 # 23 "src/RegexGrammar.fsy"
                  : 'gentype_factor));
