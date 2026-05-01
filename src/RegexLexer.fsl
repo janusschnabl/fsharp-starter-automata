@@ -16,6 +16,8 @@ rule tokenize = parse
 | '*'           { STAR }
 | '+'           { PLUS }
 | '|'           { PIPE }
-| ['a'-'z' 'A'-'Z' '0'-'9' ' ' '!' '@' '#' '$' '%' '^' '&' '-' '_' '=' '[' ']' '{' '}' ':' ';' ',' '.' '/' '?' '>' '<'] { CHAR (LexBuffer<_>.LexemeString lexbuf).[0] }
+| ['a'-'z' 'A'-'Z' '0'-'9' ' ' '!' '#' '%' '&' '\'' ',' '-' '/' ':' ';' '<' '=' '>' '@' '_'] { CHAR (LexBuffer<_>.LexemeString lexbuf).[0] }
+| '`'           { CHAR '`' }
+| '~'           { CHAR '~' }
 | eof           { EOF }
 | _             { failwith "Unexpected character" }
