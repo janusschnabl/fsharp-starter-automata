@@ -12,7 +12,7 @@ regex: expr EOF { $1 }
      | EOF { Empty }
 
 expr: term { $1 }
-    | expr PIPE term { Alt($1, $3) }
+    | expr PIPE term { Alternation($1, $3) }
 
 term: factor { $1 }
     | factor term { Concat($1, $2) }
