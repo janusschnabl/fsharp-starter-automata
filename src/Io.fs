@@ -2,6 +2,12 @@ module rec Io
 
 open System.Text.Json.Serialization
 
+module BiGCL =
+  type Input =
+    { commands: string }
+  type Output =
+    { binary: string }
+
 module Calculator =
   type Input =
     { expression: string }
@@ -61,6 +67,17 @@ module Parser =
     { commands: string }
   type Output =
     { pretty: string }
+
+module RiscV =
+  type Input =
+    { commands: string }
+  type Output =
+    { assembly: string }
+  type Annotation =
+    { pc: uint32
+      regs: Map<string, int32>
+      variables: Map<string, int32 * int32>
+      memory: List<int32> }
 
 module SecurityAnalysis =
   type Input =
@@ -129,14 +146,16 @@ module ce_regex_to_nfa =
 module ce_shell =
   [<JsonFSharpConverter(BaseUnionEncoding = JsonUnionEncoding.UnwrapSingleFieldCases, UnionTagName = "analysis", UnionFieldsName = "io")>]
   type Envs =
-    | Calculator of input: Calculator.Input * output: Calculator.Output * meta: unit
-    | Compiler of input: Compiler.Input * output: Compiler.Output * meta: unit
-    | Interpreter of input: Interpreter.Input * output: Interpreter.Output * meta: List<GCL.TargetDef>
-    | Parser of input: Parser.Input * output: Parser.Output * meta: unit
-    | RegexToDfa of input: ce_regex_to_dfa.Input * output: ce_regex_to_dfa.Output * meta: unit
-    | RegexToDfaDirect of input: ce_regex_to_dfa_direct.Input * output: ce_regex_to_dfa_direct.Output * meta: unit
-    | RegexToEnfa of input: ce_regex_to_enfa.Input * output: ce_regex_to_enfa.Output * meta: unit
-    | RegexToNfa of input: ce_regex_to_nfa.Input * output: ce_regex_to_nfa.Output * meta: unit
-    | Security of input: SecurityAnalysis.Input * output: SecurityAnalysis.Output * meta: SecurityAnalysis.Meta
-    | Sign of input: SignAnalysis.Input * output: SignAnalysis.Output * meta: List<GCL.TargetDef>
+    | Calculator of input: Calculator.Input * output: Calculator.Output * meta: unit * annotation: unit
+    | RegexToEnfa of input: ce_regex_to_enfa.Input * output: ce_regex_to_enfa.Output * meta: unit * annotation: unit
+    | RegexToNfa of input: ce_regex_to_nfa.Input * output: ce_regex_to_nfa.Output * meta: unit * annotation: unit
+    | RegexToDfa of input: ce_regex_to_dfa.Input * output: ce_regex_to_dfa.Output * meta: unit * annotation: unit
+    | RegexToDfaDirect of input: ce_regex_to_dfa_direct.Input * output: ce_regex_to_dfa_direct.Output * meta: unit * annotation: unit
+    | Compiler of input: Compiler.Input * output: Compiler.Output * meta: unit * annotation: unit
+    | Interpreter of input: Interpreter.Input * output: Interpreter.Output * meta: List<GCL.TargetDef> * annotation: unit
+    | BiGCL of input: BiGCL.Input * output: BiGCL.Output * meta: unit * annotation: unit
+    | RiscV of input: RiscV.Input * output: RiscV.Output * meta: unit * annotation: RiscV.Annotation
+    | Parser of input: Parser.Input * output: Parser.Output * meta: unit * annotation: unit
+    | Security of input: SecurityAnalysis.Input * output: SecurityAnalysis.Output * meta: SecurityAnalysis.Meta * annotation: unit
+    | Sign of input: SignAnalysis.Input * output: SignAnalysis.Output * meta: List<GCL.TargetDef> * annotation: unit
 
