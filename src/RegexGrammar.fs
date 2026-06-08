@@ -171,7 +171,7 @@ let _fsyacc_reductions = lazy [|
                 (
                    (
 # 15 "src/RegexGrammar.fsy"
-                                            Alt(_1, _3) 
+                                            Alternation(_1, _3) 
                    )
 # 15 "src/RegexGrammar.fsy"
                  : 'gentype_expr));
