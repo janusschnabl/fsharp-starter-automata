@@ -4,4 +4,6 @@ watch = ["*.fs", "*.fsl", "*.fsy"]
 ignore = [
     "src/Grammar.fs",
     "src/Lexer.fs",
+    "src/RegexGrammar.fs",
+    "src/RegexLexer.fs",
 ]
